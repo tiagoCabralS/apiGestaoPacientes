@@ -59,12 +59,12 @@ class Usuario{
 
 // Lista de usuarios que podem fazer LOGIN
 let usuariosCadastrados = [
-    new Usuario("yuriGabrielGostoso", "Yuri Gabriel", "13676767676", "yuri@email.com", "senhaDoYuri123")
+    new Usuario(1, "yuriGabriel", "Yuri Gabriel", "13676767676", "yuri@email.com", "senhaDoYuri123")
 ]
 
 // Lista de Pacientes cadastrados
 let pacientesCadastrados = [
-    new Paciente(1, "123456", "Tiago", "2007-08-13", "M", "67676767676", "13676767676", "yuri@email.com", new Endereco("11111111", "Rua Das Águas", "69", "Joinvile", "Pindamonhangaba", "Acre"), "O+", [], [], 80.5, 2.67)
+    new Paciente(1, "Tiago", "2007-08-13", "M", "67676767676", "13676767676", "yuri@email.com", new Endereco("11111111", "Rua Das Águas", "69", "Joinvile", "Pindamonhangaba", "Acre"), "O+", [], [], 80.5, 2.67)
 ]
 
 const PORT = 3000
@@ -86,20 +86,21 @@ app.use(express.urlencoded({ extended: true })); // Se for envio de formulário 
 
 // GET Paciente
 app.get("/paciente/:id", (req, res) => {
-    let id = req.params.id
-    let pacienteEncontrado = null
-    for (let paciente of pacientesCadastrados){
-        if (paciente.id == id){
-            pacienteEncontrado = paciente
-        }
+    let id = Number(req.params.id)
+    let pacienteEncontrado = pacientesCadastrados.find(
+        paciente => paciente && paciente.id === id
+    )
+    if (!pacienteEncontrado){
+        return res.status(404).json({
+            erro: `Paciente com id ${id} não foi encontrado`
+        })
     }
-    return res.json([pacienteEncontrado || `Paciente com id:${id} não foi encontrado`])
+    return res.json(pacienteEncontrado)
 })
 
 // POST novo Paciente
 app.post("/paciente/", (req, res) => { 
     let id = pacientesCadastrados.at(-1).id + 1
-    let token = pacientesCadastrados.at(-1).token + 1
     let nome = req.body.nome 
     let data_nascimento = req.body.data_nascimento 
     let genero = req.body.genero
@@ -122,9 +123,9 @@ app.post("/paciente/", (req, res) => {
 
     let novoPaciente = new Paciente(id, token, nome, data_nascimento, genero, cpf, telefone, email, endereco, tipoSanguineo, alergias, comorbidades, peso, altura)
 
-    pacientesCadastrados[id] = novoPaciente
+    pacientesCadastrados.push(novoPaciente)
 
-    return res.json([novoPaciente])
+    return res.json(novoPaciente)
 })
 
 // UPDATE Paciente (Caso exista)
