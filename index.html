@@ -45,7 +45,9 @@
         <button type="submit">Enviar</button>
     </form>
     <h2>Atualização de Paciente</h2>
-    <form action="http://localhost:3000/pacientes/edit/1" method="POST">
+    <form action="http://localhost:3000/paciente/edit/" method="POST">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome">
         <label for="data_nascimento">Data de Nascimento:</label>

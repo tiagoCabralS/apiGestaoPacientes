@@ -126,11 +126,12 @@ app.post("/paciente/", (req, res) => {
 
     pacientesCadastrados.push(novoPaciente)
 
-    return res.json(novoPaciente)
+    return res.redirect(`/paciente/${id}`)
 })
 
 // UPDATE Paciente (Caso exista)
-app.post("/pacientes/edit/:id", (req, res) => {
+app.post("/paciente/edit/", (req, res) => {
+    let id = req.body.id
     let nome = req.body.nome 
     let data_nascimento = req.body.data_nascimento 
     let genero = req.body.genero
@@ -150,8 +151,6 @@ app.post("/pacientes/edit/:id", (req, res) => {
     let peso = req.body.peso
     let altura = req.body.altura
 
-    let id = req.params.id
-
     let endereco = new Endereco(cep, rua, numero, bairro, cidade, estado)
 
     for (let i = 0; i < pacientesCadastrados.length; i++){
@@ -170,6 +169,8 @@ app.post("/pacientes/edit/:id", (req, res) => {
             pacientesCadastrados[i].endereco = endereco
         }
     }
+
+    return res.redirect(`/paciente/${id}`)
 })
 
 // DELETE Paciente (Caso exista)
