@@ -100,8 +100,34 @@ app.get("/paciente/:id", (req, res) => {
 
 // POST novo Paciente
 app.post("/paciente/", (req, res) => { 
-    let id = pacientesCadastrados.at(-1).id + 1
-    let token = pacientesCadastrados.at(-1).token + 1
+    let id = null
+    let ultimo_id = null
+    try {
+        ultimo_id = Number(pacientesCadastrados.at(-1).id)
+    }
+    catch (error){
+        ultimo_id = 0
+    }
+    if (ultimo_id && ultimo_id != undefined){
+        id = ultimo_id + 1
+    }
+    else{
+        id = 1
+    }
+    let token = null
+    let ultimo_token = null
+    try {
+        ultimo_token = pacientesCadastrados.at(-1).token
+    }
+    catch (error) {
+        ultimo_token = 0
+    }
+    if (ultimo_token && ultimo_token != undefined){
+        token = ultimo_token + 1
+    }
+    else{
+        token = 1
+    }
     let nome = req.body.nome 
     let data_nascimento = req.body.data_nascimento 
     let genero = req.body.genero
@@ -174,6 +200,28 @@ app.post("/paciente/edit/", (req, res) => {
 })
 
 // DELETE Paciente (Caso exista)
+app.post("/paciente/delete/", (req, res) =>{
+    let indice = null
+    let id = Number(req.body.id) 
+    for (let i in pacientesCadastrados){
+        if (Number(pacientesCadastrados[i].id) === id){
+            indice = i
+        }
+    }
+    
+    if (indice){
+        pacientesCadastrados.splice(indice, 1)
+        return res.status(200).json({
+            message: `Paciente com id ${id} foi deletado com sucesso.`
+        })
+    }
+    else{
+        return res.status(404).json({
+            erro: `Paciente com id ${id} não foi encontrado.`
+        })
+    }
+    
+})
 
 app.listen(PORT, () => {
     console.log(`O servidor está rodando na porta ${PORT}`)
