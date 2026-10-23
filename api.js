@@ -128,25 +128,11 @@ app.post("/paciente/", (req, res) => {
     else{
         token = 1
     }
-    let nome = req.body.nome 
-    let data_nascimento = req.body.data_nascimento 
-    let genero = req.body.genero
-    let cpf = req.body.cpf
-    let telefone = req.body.telefone
-    let email = req.body.email
-    // (cep, rua, numero, bairro, cidade, estado)
-    let cep = req.body.cep
-    let rua = req.body.rua
-    let numero = req.body.numero
-    let bairro = req.body.bairro
-    let cidade = req.body.cidade
-    let estado = req.body.estado
-    let endereco = new Endereco(cep, rua, numero, bairro, cidade, estado)
-    let tipoSanguineo = req.body.tipoSanguineo
-    let alergias = req.body.alergias
-    let comorbidades = req.body.comorbidades
-    let peso = req.body.peso
-    let altura = req.body.altura
+    const { 
+        nome, data_nascimento, genero, cpf, telefone, email, cep, rua, numero, bairro, cidade, estado, tipoSanguineo, alergias, comorbidades, peso, altura 
+    } = req.body
+    
+    const endereco = new Endereco(cep, rua, numero, bairro, cidade, estado)
 
     let novoPaciente = new Paciente(id, token, nome, data_nascimento, genero, cpf, telefone, email, endereco, tipoSanguineo, alergias, comorbidades, peso, altura)
 
