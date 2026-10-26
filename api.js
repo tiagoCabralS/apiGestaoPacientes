@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors";
+import jwt from "jsonwebtoken";
 
 class Endereco{
     constructor(cep, rua, numero, bairro, cidade, estado){
@@ -57,17 +58,18 @@ class Usuario{
     }
 }
 
-// Lista de usuarios que podem fazer LOGIN
+// Array de usuarios que podem fazer LOGIN
 let usuariosCadastrados = [
     new Usuario(1, "yuriGabriel", "Yuri Gabriel", "13676767676", "yuri@email.com", "senhaDoYuri123")
 ]
 
-// Lista de Pacientes cadastrados
+// Array de Pacientes cadastrados
 let pacientesCadastrados = [
     new Paciente(1, 1, "Tiago", "2007-08-13", "M", "67676767676", "13676767676", "yuri@email.com", new Endereco("11111111", "Rua Das Águas", "69", "Joinvile", "Pindamonhangaba", "Acre"), "O+", [], [], 80.5, 2.67)
 ]
 
 const PORT = 3000
+const ACCES_TOKEN_KEY = "iuhiewuohc8e3chnc2n83fncn3c"
 
 const app = express()
 
@@ -83,6 +85,40 @@ app.use(express.urlencoded({ extended: true })); // Se for envio de formulário 
 // Rotas da API:
 
 // LOGIN do Usuario
+app.post("/usuario/login", (req, res) => {
+    const {username, senha} = req.body
+
+    let usuarioEncontrado = false
+    for (let usuario of usuariosCadastrados){
+        if (usuario._username === username && usuario._senha === senha){
+            usuarioEncontrado = true
+        }
+    }
+
+    if (!usuarioEncontrado){
+        return res.status(403).json({error: "Usuário ou senha inválidos!"})
+    }
+
+    const token = jwt.sign({username}, ACCES_TOKEN_KEY, {
+        expiresIn: "15m",
+    })
+
+    return res.json({ token })
+})
+
+app.get("/usuario/validacao", (req, res) => {
+    const authHeader = req.headers["authorization"]
+
+    const token = authHeader && authHeader.split(" ")[1]
+
+    if (!token) return res.status(403).json({error: "Não autorizado"}) 
+
+    jwt.verify(token, ACCES_TOKEN_KEY, (err, username) => {
+        if (err) return res.status(403).json({error: "Não autorizado"})
+        
+        return res.json({message: "Acesso autorizado!", username})
+    })
+})
 
 // GET Paciente
 app.get("/paciente/:id", (req, res) => {
