@@ -106,6 +106,7 @@ app.post("/usuario/login", (req, res) => {
     return res.json({ token })
 })
 
+// VALIDAÇÃO do Usuario
 app.get("/usuario/validacao", (req, res) => {
     const authHeader = req.headers["authorization"]
 
