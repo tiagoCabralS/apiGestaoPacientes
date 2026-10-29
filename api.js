@@ -119,6 +119,11 @@ app.get("/usuario/validacao", (req, res) => {
     })
 })
 
+// GET todos os pacientes cadastrados
+app.get("/paciente/all", (req, res) => {
+    return res.json(pacientesCadastrados)
+})
+
 // GET Paciente
 app.get("/paciente/:id", (req, res) => {
     let id = Number(req.params.id)
