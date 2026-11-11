@@ -23,6 +23,7 @@ class Paciente{
         telefone, 
         email, 
         endereco, 
+        sexo,
         tipoSanguineo,
         alergias,
         comorbidades,
@@ -37,6 +38,7 @@ class Paciente{
         this.telefone = telefone
         this.email = email
         this.endereco = endereco
+        this.sexo = sexo
         this.tipoSanguineo = tipoSanguineo
         this.alergias = alergias
         this.comorbidades = comorbidades
@@ -63,7 +65,8 @@ let usuariosCadastrados = [
 
 // Array de Pacientes cadastrados
 let pacientesCadastrados = [
-    new Paciente(1, "Tiago", "2007-08-13", "M", "67676767676", "13676767676", "yuri@email.com", new Endereco("11111111", "Rua Das Águas", "69", "Joinvile", "Pindamonhangaba", "Acre"), "O+", [], [], 80.5, 2.67)
+    new Paciente(1, "Tiago Santos Cabral da Silva", "2007-08-13", "Homem", "67676767676", "13676767676", "tiagocabral.gja@gmail.com", new Endereco("11111111", "Rua Das Águas", "69", "Joinvile", "Pindamonhangaba", "Acre"), "M", "O+", [], [], 80.5, 2.67),
+    new Paciente(2, "Yuri", "2007-08-13", "Homem", "67676767676", "13676767676", "yuri@email.com", new Endereco("11111111", "Rua Das Águas", "69", "Joinvile", "Pindamonhangaba", "Acre"), "F", "O+", [], [], 80.5, 2.67)
 ]
 
 const PORT = 3000
@@ -72,7 +75,7 @@ const ACCES_TOKEN_KEY = "iuhiewuohc8e3chnc2n83fncn3c"
 const app = express()
 
 app.use(cors({
-    origin: "http://127.0.0.1:5500",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "DELETE"]
 }))
 
@@ -155,12 +158,12 @@ app.post("/paciente/create", (req, res) => {
         id = 1
     }
     const { 
-        nome, data_nascimento, genero, cpf, telefone, email, cep, rua, numero, bairro, cidade, estado, tipoSanguineo, alergias, comorbidades, peso, altura 
+        nome, data_nascimento, genero, cpf, telefone, email, cep, rua, numero, bairro, cidade, estado, sexo, tipoSanguineo, alergias, comorbidades, peso, altura 
     } = req.body
     
     const endereco = new Endereco(cep, rua, numero, bairro, cidade, estado)
 
-    let novoPaciente = new Paciente(id, nome, data_nascimento, genero, cpf, telefone, email, endereco, tipoSanguineo, alergias, comorbidades, peso, altura)
+    let novoPaciente = new Paciente(id, nome, data_nascimento, genero, cpf, telefone, email, endereco, sexo, tipoSanguineo, alergias, comorbidades, peso, altura)
 
     pacientesCadastrados.push(novoPaciente)
 
