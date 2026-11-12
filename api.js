@@ -174,12 +174,12 @@ app.post("/paciente/create", (req, res) => {
 app.post("/paciente/:id/edit", (req, res) => {
     const { id } = req.params
     const { 
-        nome, data_nascimento, genero, cpf, telefone, email, cep, rua, numero, bairro, cidade, estado, tipoSanguineo, alergias, comorbidades, peso, altura 
+        nome, data_nascimento, genero, cpf, telefone, email, cep, rua, numero, bairro, cidade, estado, sexo, tipoSanguineo, alergias, comorbidades, peso, altura
     } = req.body
 
     let endereco = new Endereco(cep, rua, numero, bairro, cidade, estado)
 
-    let novoPaciente = new Paciente(Number(id), nome, data_nascimento, genero, cpf, telefone, email, endereco, tipoSanguineo, alergias, comorbidades, peso, altura)
+    let novoPaciente = new Paciente(Number(id), nome, data_nascimento, genero, cpf, telefone, email, endereco, sexo, tipoSanguineo, alergias, comorbidades, peso, altura)
 
     let usuarioEncontrado = false
     let indice = null
